@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { GlobalStyled } from './style.js';
 import App from './App';
 
-ReactDOM.render( < App / > , document.getElementById('root'));
+ReactDOM.render( <div> < App / > < GlobalStyled / > </div> , document.getElementById('root'));
