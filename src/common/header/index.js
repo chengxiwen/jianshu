@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import { actionCreators } from './store';
@@ -19,71 +19,79 @@ import {
 } from './style';
 
 
+
+class Header extends Component {
 // 聚焦则显示SearchInfo，不聚焦则隐藏
-const getListArea = (show) => {
-	if(show){
-		return (
-			<SearchInfo>
-				<SearchInfoTitle>
-					热门搜索
-					<SearchInfoSwitch>换一批</SearchInfoSwitch>
-				</SearchInfoTitle>
-				<SearchInfoList>
-					<SearchInfoItem>教育</SearchInfoItem>
-					<SearchInfoItem>教育</SearchInfoItem>
-					<SearchInfoItem>教育</SearchInfoItem>
-					<SearchInfoItem>教育</SearchInfoItem>
-					<SearchInfoItem>教育</SearchInfoItem>
-					<SearchInfoItem>教育</SearchInfoItem>
-					<SearchInfoItem>教育</SearchInfoItem>
-				</SearchInfoList>
-			</SearchInfo>
-		)
+	getListArea (show) {
+		if(show){
+			return (
+				<SearchInfo>
+					<SearchInfoTitle>
+						热门搜索
+						<SearchInfoSwitch>换一批</SearchInfoSwitch>
+					</SearchInfoTitle>
+					<SearchInfoList>
+						<SearchInfoItem>教育</SearchInfoItem>
+						<SearchInfoItem>教育</SearchInfoItem>
+						<SearchInfoItem>教育</SearchInfoItem>
+						<SearchInfoItem>教育</SearchInfoItem>
+						<SearchInfoItem>教育</SearchInfoItem>
+						<SearchInfoItem>教育</SearchInfoItem>
+						<SearchInfoItem>教育</SearchInfoItem>
+					</SearchInfoList>
+				</SearchInfo>
+			)
 	}else {
 		return null;
 	}
 }
 
-// 因为Header组件里面只有render函数了，将其变成无状态组件，所以原本的this.props.focused变成props.focused
-const Header = (props) => {
-	return ( 
-		<HeaderWrapper>
-			<Logo />
-			<Nav>
-				<NavItem className = "left active">首页</NavItem> 
-				<NavItem className = "left">下载App</NavItem> 
-				<NavItem className = "right">登陆</NavItem> 
-				<NavItem className = "right">
-				<i className = "iconfont">&#xe636;</i> 
-				</NavItem> 
-				<SearchWrapper> { /* in是用来控制出场和入场动画的，值为true或false，这里就可以用this.state.focued来作为in的值 */ } 
-					{/*因为 mapStateToProps将store里的数据映射到组件的props里，所以this.state.focused可以改为this.props.focused */}
-					<CSSTransition 
-						in = { props.focused }
-						timeout = { 200 }
-						classNames = "slide"
-					>
-						<NavSearch 
-							className = { props.focused ? 'focused' : '' }
-							onFocus = { props.handleInputFocus }
-							onBlur = { props.handleInputBlur }
+
+	render(){
+		return ( 
+			<HeaderWrapper>
+				<Logo />
+				<Nav>
+					<NavItem className = "left active">首页</NavItem> 
+					<NavItem className = "left">下载App</NavItem> 
+					<NavItem className = "right">登陆</NavItem> 
+					<NavItem className = "right">
+					<i className = "iconfont">&#xe636;</i> 
+					</NavItem> 
+					<SearchWrapper> { /* in是用来控制出场和入场动画的，值为true或false，这里就可以用this.state.focued来作为in的值 */ } 
+						{/*因为 mapStateToProps将store里的数据映射到组件的props里，所以this.state.focused可以改为this.props.focused */}
+						<CSSTransition 
+							in = { this.props.focused }
+							timeout = { 200 }
+							classNames = "slide"
 						>
-						</NavSearch> 
-					</CSSTransition> 
-					<i className = { props.focused ? 'focused iconfont' : 'iconfont' } >&#xe614;</i>
-					{getListArea(props.focused)}
-				</SearchWrapper> 
-			</Nav>
-			<Addition>
-				<Button className = "writing">
-				<i className = "iconfont">&#xe615;</i>
-				写文章 
-				</Button> 
-				<Button className = "reg">注册</Button> 
-			</Addition> 
-		</HeaderWrapper>
+							<NavSearch 
+								className = { this.props.focused ? 'focused' : '' }
+								onFocus = { this.props.handleInputFocus }
+								onBlur = { this.props.handleInputBlur }
+							>
+							</NavSearch> 
+						</CSSTransition> 
+						<i className = { this.props.focused ? 'focused iconfont' : 'iconfont' } >&#xe614;</i>
+						{this.getListArea(this.props.focused)}
+					</SearchWrapper> 
+				</Nav>
+				<Addition>
+					<Button className = "writing">
+					<i className = "iconfont">&#xe615;</i>
+					写文章 
+					</Button> 
+					<Button className = "reg">注册</Button> 
+				</Addition> 
+			</HeaderWrapper>
 	)
+	}
 }
+
+// // 因为Header组件里面只有render函数了，将其变成无状态组件，所以原本的this.props.focused变成props.focused
+// const Header = (props) => {
+	
+// }
 
 const mapStateToProps = (state) => {
 	// 将store里的数据映射到组件的props里，前面的this.state.focused可以改为this.props.focused
