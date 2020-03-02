@@ -57,7 +57,8 @@ const mapStateToProps = (state) => {
 	// 将store里的数据映射到组件的props里，前面的this.state.focused可以改为this.props.focused
 	// 因为现在数据在header底下，所以是state.header.focused
 	return {
-		focused: state.header.focused
+		// immutable类型的数据调用对象的属性要通过get
+		focused: state.header.get('focused')
 	}
 }
 
