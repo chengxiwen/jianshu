@@ -8,10 +8,41 @@ import {
 	Nav,
 	NavItem,
 	SearchWrapper,
+	SearchInfo,
+	SearchInfoTitle,
+	SearchInfoSwitch,
+	SearchInfoItem,
+	SearchInfoList,
 	NavSearch,
 	Addition,
 	Button
 } from './style';
+
+
+// 聚焦则显示SearchInfo，不聚焦则隐藏
+const getListArea = (show) => {
+	if(show){
+		return (
+			<SearchInfo>
+				<SearchInfoTitle>
+					热门搜索
+					<SearchInfoSwitch>换一批</SearchInfoSwitch>
+				</SearchInfoTitle>
+				<SearchInfoList>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+					<SearchInfoItem>教育</SearchInfoItem>
+				</SearchInfoList>
+			</SearchInfo>
+		)
+	}else {
+		return null;
+	}
+}
 
 // 因为Header组件里面只有render函数了，将其变成无状态组件，所以原本的this.props.focused变成props.focused
 const Header = (props) => {
@@ -40,6 +71,7 @@ const Header = (props) => {
 						</NavSearch> 
 					</CSSTransition> 
 					<i className = { props.focused ? 'focused iconfont' : 'iconfont' } >&#xe614;</i>
+					{getListArea(props.focused)}
 				</SearchWrapper> 
 			</Nav>
 			<Addition>
