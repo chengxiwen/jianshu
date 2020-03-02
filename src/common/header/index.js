@@ -1,76 +1,80 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import {
-	HeaderWrapper, 
-	Logo, 
-	Nav, 
-	NavItem, 
+	HeaderWrapper,
+	Logo,
+	Nav,
+	NavItem,
 	SearchWrapper,
-	NavSearch, 
-	Addition, 
+	NavSearch,
+	Addition,
 	Button
 } from './style';
 
-class Header extends Component { 
-	constructor(props){
-		super(props);
-		this.state = {
-			focused: false
-		}
-		this.handleInputFocus = this.handleInputFocus.bind(this);
-		this.handleInputBlur = this.handleInputBlur.bind(this);
-	}
-	
-	render(){
-		return (
-			<HeaderWrapper>
-				<Logo />
-				<Nav>
-					<NavItem className="left active">首页</NavItem>
-					<NavItem className="left">下载App</NavItem>
-					<NavItem className="right">登陆</NavItem>
-					<NavItem className="right">
-						<i className="iconfont">&#xe636;</i>
-					</NavItem>
-					<SearchWrapper>
-					{/* in是用来控制出场和入场动画的，值为true或false，这里就可以用this.state.focued来作为in的值 */}
-						<CSSTransition
-							in={this.state.focused}
-							timeout={200}
-							classNames="slide"
+// 因为Header组件里面只有render函数了，将其变成无状态组件，所以原本的this.props.focused变成props.focused
+const Header = (props) => {
+	return ( 
+		<HeaderWrapper>
+			<Logo />
+			<Nav>
+				<NavItem className = "left active">首页</NavItem> 
+				<NavItem className = "left">下载App</NavItem> 
+				<NavItem className = "right">登陆</NavItem> 
+				<NavItem className = "right">
+				<i className = "iconfont">&#xe636;</i> 
+				</NavItem> 
+				<SearchWrapper> { /* in是用来控制出场和入场动画的，值为true或false，这里就可以用this.state.focued来作为in的值 */ } 
+					{/*因为 mapStateToProps将store里的数据映射到组件的props里，所以this.state.focused可以改为this.props.focused */}
+					<CSSTransition 
+						in = { props.focused }
+						timeout = { 200 }
+						classNames = "slide"
+					>
+						<NavSearch 
+							className = { props.focused ? 'focused' : '' }
+							onFocus = { props.handleInputFocus }
+							onBlur = { props.handleInputBlur }
 						>
-							<NavSearch
-								className={this.state.focused ? 'focused' : ''}
-								onFocus={this.handleInputFocus}
-								onBlur={this.handleInputBlur}
-							>
-							</NavSearch>
-						</CSSTransition>
-						<i className={this.state.focused ? 'focused iconfont' : 'iconfont'}>&#xe614;</i>
-					</SearchWrapper>
-				</Nav>
-				<Addition>	
-					<Button className="writing">
-						<i className="iconfont">&#xe615;</i>
-						写文章
-					</Button>
-					<Button className="reg">注册</Button>
-				</Addition>
-			</HeaderWrapper>
-		)
-	}
+						</NavSearch> 
+					</CSSTransition> 
+					<i className = { props.focused ? 'focused iconfont' : 'iconfont' } >&#xe614;</i>
+				</SearchWrapper> 
+			</Nav>
+			<Addition>
+				<Button className = "writing">
+				<i className = "iconfont">&#xe615;</i>
+				写文章 
+				</Button> 
+				<Button className = "reg">注册</Button> 
+			</Addition> 
+		</HeaderWrapper>
+	)
+}
 
-	handleInputFocus(){
-		this.setState({
-			focused: true
-		})
-	}
-
-	handleInputBlur(){
-		this.setState({
-			focused: false
-		})
+const mapStateToProps = (state) => {
+	// 将store里的数据映射到组件的props里，前面的this.state.focused可以改为this.props.focused
+	return {
+		focused: state.focused
 	}
 }
 
-export default Header;
+const mapDispatchToProps = (disptch) => {
+	return {
+		handleInputFocus(){
+			const action = {
+				type: 'search_focus'
+			};
+			disptch(action);
+		},
+		handleInputBlur(){
+			const action = {
+				type: 'search_blur'
+			};
+			disptch(action);
+		}
+	}
+}
+
+// 让Header组件和store连接起来
+export default connect(mapStateToProps,mapDispatchToProps)(Header);
