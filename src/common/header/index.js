@@ -54,8 +54,9 @@ const Header = (props) => {
 
 const mapStateToProps = (state) => {
 	// 将store里的数据映射到组件的props里，前面的this.state.focused可以改为this.props.focused
+	// 因为现在数据在header底下，所以是state.header.focused
 	return {
-		focused: state.focused
+		focused: state.header.focused
 	}
 }
 
