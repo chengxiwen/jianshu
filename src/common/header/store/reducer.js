@@ -13,7 +13,7 @@ export default (state = defaultState, action) => {
     }
 
     if (action.type === constants.SEARCH_BLUR) {
-        return state.set('focused', true);
+        return state.set('focused', false);
     }
     return state;
 }

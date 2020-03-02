@@ -58,7 +58,11 @@ const mapStateToProps = (state) => {
 	// 因为现在数据在header底下，所以是state.header.focused
 	return {
 		// immutable类型的数据调用对象的属性要通过get
-		focused: state.header.get('focused')
+		// 这里的state是在最外层的大的store文件夹下创建的，所以他还是一个js对象，
+		// 而state.header是immutable对象，所以不太统一
+		// 如果将state变成一个immutable对象，需要一个第三方的模块叫redux-immutable
+		// 通过在最外层的store文件夹下的reducer文件的修改，state变成了immutable对象，所以获取属性方式也变成get
+		focused: state.get('header').get('focused')
 	}
 }
 
