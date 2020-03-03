@@ -23,21 +23,31 @@ import {
 class Header extends Component {
 // 聚焦则显示SearchInfo，不聚焦则隐藏
 	getListArea () {
-		const { focused, list } = this.props;
-		if(focused){
+		const { focused, list, page, mouseIn, totalPage, handleMouseEnter, handleMouseLeave, handleChangePage } = this.props;
+		// 因为此时list是immutable对象，toJS将其转换成普通的JS对象
+		const newList = list.toJS();
+		const pageList = [];
+		// 不然还没发ajax的时候，newList为空，也会渲染，就会有警告newList[i]为undefined
+		if(newList.length){
+			for(let i=(page-1)*10;i<page*10;i++){
+				pageList.push(
+					<SearchInfoItem key={newList[i]}>{newList[i]}</SearchInfoItem>
+				)
+			}
+		}
+		if(focused || mouseIn){
 			return (
-				<SearchInfo>
+				<SearchInfo 
+					onMouseEnter={handleMouseEnter}
+					onMouseLeave={handleMouseLeave}
+				>
 					<SearchInfoTitle>
 						热门搜索
-						<SearchInfoSwitch>换一批</SearchInfoSwitch>
+						<SearchInfoSwitch onClick={() => handleChangePage(page, totalPage)}>换一批</SearchInfoSwitch>
 					</SearchInfoTitle>
 					<SearchInfoList>
 					{/* 这里list已经是immutable对象了，immutable中也提供了map方法 */}
-						{
-							list.map((item) => {
-								return <SearchInfoItem key={item}>{item}</SearchInfoItem>
-							})
-						}
+						{pageList}
 					</SearchInfoList>
 				</SearchInfo>
 			)
@@ -105,7 +115,10 @@ const mapStateToProps = (state) => {
 		// 通过在最外层的store文件夹下的reducer文件的修改，state变成了immutable对象，所以获取属性方式也变成get
 		// focused: state.get('header').get('focused')
 		focused: state.getIn(['header', 'focused']),
-		list: state.getIn(['header', 'list'])
+		list: state.getIn(['header', 'list']),
+		page: state.getIn(['header', 'page']),
+		totalPage: state.getIn(['header', 'totalPage']),
+		mouseIn: state.getIn(['header', 'mouseIn'])
 	}
 }
 
@@ -118,6 +131,20 @@ const mapDispatchToProps = (disptch) => {
 		},
 		handleInputBlur(){
 			disptch(actionCreators.searchBlur());
+		},
+		handleMouseEnter(){
+			disptch(actionCreators.mouseEnter());
+		},
+		handleMouseLeave(){
+			disptch(actionCreators.mouseLeave());
+		},
+		handleChangePage(page, totalPage){
+			if(page<totalPage){
+				disptch(actionCreators.changePage(page+1));
+			}else{
+				disptch(actionCreators.changePage(1));
+			}
+			
 		}
 	}
 }
