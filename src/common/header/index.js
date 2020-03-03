@@ -43,7 +43,12 @@ class Header extends Component {
 				>
 					<SearchInfoTitle>
 						热门搜索
-						<SearchInfoSwitch onClick={() => handleChangePage(page, totalPage)}>换一批</SearchInfoSwitch>
+						<SearchInfoSwitch 
+							onClick={() => handleChangePage(page, totalPage, this.spinIcon)}
+						>
+							<i ref={(icon) => {this.spinIcon = icon}} className = "iconfont spin">&#xe851;</i>
+							换一批
+						</SearchInfoSwitch>
 					</SearchInfoTitle>
 					<SearchInfoList>
 					{/* 这里list已经是immutable对象了，immutable中也提供了map方法 */}
@@ -83,7 +88,7 @@ class Header extends Component {
 							>
 							</NavSearch> 
 						</CSSTransition> 
-						<i className = { focused ? 'focused iconfont' : 'iconfont' } >&#xe614;</i>
+						<i className = { focused ? 'focused iconfont zoom' : 'iconfont zoom' } >&#xe614;</i>
 						{this.getListArea()}
 					</SearchWrapper> 
 				</Nav>
@@ -138,7 +143,15 @@ const mapDispatchToProps = (disptch) => {
 		handleMouseLeave(){
 			disptch(actionCreators.mouseLeave());
 		},
-		handleChangePage(page, totalPage){
+		handleChangePage(page, totalPage, spin){
+			// 每点击换一批，前面的小图标旋转360度，用的ref获取DOM节点做的
+			let originAngle = spin.style.transform.replace(/[^0-9]/ig, '');
+			if (originAngle) {
+				originAngle = parseInt(originAngle, 10);
+			}else{
+				originAngle = 0;
+			}
+			spin.style.transform = 'rotate(' + (originAngle + 360) + 'deg)';
 			if(page<totalPage){
 				disptch(actionCreators.changePage(page+1));
 			}else{
