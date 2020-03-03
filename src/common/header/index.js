@@ -23,7 +23,8 @@ import {
 class Header extends Component {
 // 聚焦则显示SearchInfo，不聚焦则隐藏
 	getListArea () {
-		if(this.props.focused){
+		const { focused, list } = this.props;
+		if(focused){
 			return (
 				<SearchInfo>
 					<SearchInfoTitle>
@@ -33,7 +34,7 @@ class Header extends Component {
 					<SearchInfoList>
 					{/* 这里list已经是immutable对象了，immutable中也提供了map方法 */}
 						{
-							this.props.list.map((item) => {
+							list.map((item) => {
 								return <SearchInfoItem key={item}>{item}</SearchInfoItem>
 							})
 						}
@@ -47,6 +48,7 @@ class Header extends Component {
 
 
 	render(){
+		const { focused, handleInputFocus, handleInputBlur } = this.props;
 		return ( 
 			<HeaderWrapper>
 				<Logo />
@@ -60,18 +62,18 @@ class Header extends Component {
 					<SearchWrapper> { /* in是用来控制出场和入场动画的，值为true或false，这里就可以用this.state.focued来作为in的值 */ } 
 						{/*因为 mapStateToProps将store里的数据映射到组件的props里，所以this.state.focused可以改为this.props.focused */}
 						<CSSTransition 
-							in = { this.props.focused }
+							in = { focused }
 							timeout = { 200 }
 							classNames = "slide"
 						>
 							<NavSearch 
-								className = { this.props.focused ? 'focused' : '' }
-								onFocus = { this.props.handleInputFocus }
-								onBlur = { this.props.handleInputBlur }
+								className = { focused ? 'focused' : '' }
+								onFocus = { handleInputFocus }
+								onBlur = { handleInputBlur }
 							>
 							</NavSearch> 
 						</CSSTransition> 
-						<i className = { this.props.focused ? 'focused iconfont' : 'iconfont' } >&#xe614;</i>
+						<i className = { focused ? 'focused iconfont' : 'iconfont' } >&#xe614;</i>
 						{this.getListArea()}
 					</SearchWrapper> 
 				</Nav>
