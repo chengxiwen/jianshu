@@ -22,8 +22,8 @@ import {
 
 class Header extends Component {
 // 聚焦则显示SearchInfo，不聚焦则隐藏
-	getListArea (show) {
-		if(show){
+	getListArea () {
+		if(this.props.focused){
 			return (
 				<SearchInfo>
 					<SearchInfoTitle>
@@ -31,13 +31,12 @@ class Header extends Component {
 						<SearchInfoSwitch>换一批</SearchInfoSwitch>
 					</SearchInfoTitle>
 					<SearchInfoList>
-						<SearchInfoItem>教育</SearchInfoItem>
-						<SearchInfoItem>教育</SearchInfoItem>
-						<SearchInfoItem>教育</SearchInfoItem>
-						<SearchInfoItem>教育</SearchInfoItem>
-						<SearchInfoItem>教育</SearchInfoItem>
-						<SearchInfoItem>教育</SearchInfoItem>
-						<SearchInfoItem>教育</SearchInfoItem>
+					{/* 这里list已经是immutable对象了，immutable中也提供了map方法 */}
+						{
+							this.props.list.map((item) => {
+								return <SearchInfoItem key={item}>{item}</SearchInfoItem>
+							})
+						}
 					</SearchInfoList>
 				</SearchInfo>
 			)
@@ -73,7 +72,7 @@ class Header extends Component {
 							</NavSearch> 
 						</CSSTransition> 
 						<i className = { this.props.focused ? 'focused iconfont' : 'iconfont' } >&#xe614;</i>
-						{this.getListArea(this.props.focused)}
+						{this.getListArea()}
 					</SearchWrapper> 
 				</Nav>
 				<Addition>
@@ -102,13 +101,17 @@ const mapStateToProps = (state) => {
 		// 而state.header是immutable对象，所以不太统一
 		// 如果将state变成一个immutable对象，需要一个第三方的模块叫redux-immutable
 		// 通过在最外层的store文件夹下的reducer文件的修改，state变成了immutable对象，所以获取属性方式也变成get
-		focused: state.get('header').get('focused')
+		// focused: state.get('header').get('focused')
+		focused: state.getIn(['header', 'focused']),
+		list: state.getIn(['header', 'list'])
 	}
 }
 
 const mapDispatchToProps = (disptch) => {
 	return {
 		handleInputFocus(){
+			// 发送异步请求
+			disptch(actionCreators.getList());
 			disptch(actionCreators.searchFocus());
 		},
 		handleInputBlur(){

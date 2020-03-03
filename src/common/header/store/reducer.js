@@ -16,5 +16,10 @@ export default (state = defaultState, action) => {
     if (action.type === constants.SEARCH_BLUR) {
         return state.set('focused', false);
     }
+
+    if (action.type === constants.CHANGE_LIST) {
+        return state.set('list', action.data);
+    }
+
     return state;
 }
