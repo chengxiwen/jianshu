@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Home from './pages/home';
-import Detail from './pages/detail';
+// 将Detail变成一个异步组件
+import Detail from './pages/detail/loadable.js';
 import Login from './pages/login';
 import Write from './pages/write';
 import Header from './common/header';
