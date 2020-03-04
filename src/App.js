@@ -17,7 +17,7 @@ class App extends Component {
 						{/* Header组件放在这儿使得每个页面都显示头部部分，即common文件夹中的Header*/}
 						<Header />
 						<Route path='/' exact component={Home}></Route>
-						<Login path='/login' exact component={Login}></Login>
+						<Route path='/login' exact component={Login}></Route>
 						<Route path='/detail/:id' exact component={Detail}></Route>
 					</div>
 				</BrowserRouter>
