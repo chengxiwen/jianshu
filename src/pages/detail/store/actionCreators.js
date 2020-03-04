@@ -7,9 +7,9 @@ const changeDetail = (title, content) => ({
 	content
 })
 
-export const getDetail =() => {
+export const getDetail = (id) => {
 	return (dispatch) => {
-		axios.get('api/detail.json').then((res) => {
+		axios.get('/api/detail.json?id='+ id).then((res) => {
 			// 拿到store中的数据要改变数据，所以要再发一个action
 			const result = res.data.data;
 			dispatch(changeDetail(result.title, result.content));
