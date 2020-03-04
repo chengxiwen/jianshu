@@ -7,11 +7,8 @@ export const HeaderWrapper = styled.div `
 	border-bottom: 1px solid #f0f0f0;
 `;
 
-export const Logo = styled.a.attrs({
-    href: '/'
-})
-`
-	position: absolute;
+export const Logo = styled.div
+`	position: absolute;
 	top: 0;
 	left: 0;
 	${'' /* display: block;这句加不加都可，因为行内元素添加绝对或固定定位可以直接设置宽高 */}
